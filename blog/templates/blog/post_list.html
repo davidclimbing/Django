@@ -2,12 +2,14 @@
 
 {% block main_area %}
 
-<h1>Blog
+<h1>
+  Blog
   {% if category %}<span class="badge badge-secondary">{{ category }}</span>{% endif %}
-  {% if tag %}<span class="badge badge-light"><i class="fas fa-tags"></i>{{ tag }} ({{ tag.post_set.count }})</span>{% endif %}
+  {% if tag %}<span class="badge badge-light"><i class="fa-solid fa-tags"></i>{{ tag }} ({{ tag.post_set.count }})</span>{% endif %}
 </h1>
 
-<!-- {% if post_list.exists %} -->
+{% if post_list.exists %}
+
 {% for p in post_list %}
 <!-- Blog post-->
 <div class="card mb-4" id="post-{{ p.pk }}">
@@ -22,7 +24,7 @@
     {% else %}
     <span class="badge badge-secondary float-right">미분류</span>
     {% endif %}
-    
+
     <h2 class="card-title">{{ p.title }}</h2>
     {% if p.hook_text %}
     <h5 class="text-muted">{{ p.hook_text }}</h5>
@@ -30,12 +32,12 @@
     <p class="card-text">{{ p.content | truncatewords:45 }}</p>
 
     {% if p.tags.exists %}
-    <i class="fas fa-tags"></i>
-    {% for tag in p.tags.iterator %}
+    <i class="fa-solid fa-tags"></i>
+    {% for tag in p.tags.iterator %} 
     <a href="{{ tag.get_absolute_url }}"><span class="badge badge-pill badge-light">{{ tag }}</span></a>
     {% endfor %}
-    <br/>
-    <br/>
+    <br>
+    <br>
     {% endif %}
     
     <a href="{{ p.get_absolute_url }}" class="btn btn-primary">Read More &rarr;</a>
@@ -46,5 +48,33 @@
   </div>
 </div>
 {% endfor %}
-<!-- {% endif %} -->
+
+{% else %}
+<h3>아직 게시물이 없습니다.</h3>
+{% endif %}
+
+{% if is_paginated %}
+<!-- Pagination -->
+<ul class="pagination justify-content-center mb-4">
+  {% if page_obj.has_next %}
+  <li class="page-item">
+    <a class="page-link" href="?page={{ page_obj.next_page_number }}">&larr; Older</a>
+  </li>
+  {% else %}
+  <li class="page-item disabled">
+    <a class="page-link" href="#">&larr; Older</a>
+  </li>
+  {% endif %}
+
+  {% if page_obj.has_previous %}
+  <li class="page-item">
+    <a class="page-link" href="?page={{ page_obj.previous_page_number }}">Newer &rarr;</a>
+  </li>
+  {% else %}
+  <li class="page-item disabled">
+    <a class="page-link" href="#">Newer &rarr;</a>
+  </li>
+  {% endif %}
+</ul>
+{% endif %}
 {% endblock %}
