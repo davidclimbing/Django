@@ -12,4 +12,6 @@ urlpatterns = [
     path('<int:pk>/new_comment/', views.new_comment),
     path('<int:pk>/', views.PostDetail.as_view()),
     path('', views.PostList.as_view()),
+    # path('<int:pk>/', views.single_post_page),
+    # path('', views.index),
 ]
